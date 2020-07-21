@@ -1,0 +1,28 @@
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_EX4'
+@AbapCatalog.compiler.compareFilter: true
+@AccessControl.authorizationCheck: #CHECK
+@EndUserText.label: 'arithmatic expressions'
+define view ZCDS_DDL_EX4 as 
+select from sbook
+{
+  carrid as airline_code,
+  bookid as booking_number,
+  fldate as flight_date,
+  loccuram as booking_amount,
+  100 as addition_charge,
+  loccuram + 100 as new_booking_amount,
+  ceil(loccuram + 100) as rounded_new_booking_amount,
+  cast (loccuram as abap.fltp) - cast (loccuram as abap.fltp) * 0.30  as discounted_booking_amount,
+  
+  concat(carrid, bookid) as booking_info,
+  length(concat(carrid, bookid)) as col_len,
+  
+  currency_conversion( amount => loccuram, 
+                        source_currency => loccurkey, 
+                        target_currency => cast('EUR' as abap.cuky( 5 )), 
+                        exchange_rate_date => fldate  ) as euro_booking_amount
+                        
+  
+ 
+} 
+ 
