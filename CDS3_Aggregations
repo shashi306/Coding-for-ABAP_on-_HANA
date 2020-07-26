@@ -1,0 +1,23 @@
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_EX5'
+@EndUserText.label: 'aggregation expression'
+define view ZCDS_DDL_EX5 as 
+select from sbook
+{
+    carrid as airline_code,
+    count(*) as number_of_records,
+    count(distinct loccuram) as distinct_records,
+    min(loccuram) as min_booking_amount,
+    max(loccuram) as max_booking_amount,
+    avg(loccuram) as avg_booking_amount,
+    sum(loccuram) as sum_booking_amount
+    
+    
+}
+group by
+    carrid
+    
+having carrid = 'AA'
+
+
+
+ 
