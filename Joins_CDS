@@ -1,0 +1,25 @@
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_EX6'
+@EndUserText.label: 'joins'
+define view ZCDS_DDL_EX6 as select from scarr as c
+inner join (
+                sbook as a
+                inner join scustom as b
+                 on a.customid = b.id 
+           )
+           on c.carrid = a.carrid
+    
+    {
+    
+    a.carrid,   
+    a.connid,
+    a.fldate,
+    a.bookid,
+    a.customid,
+    b.name,
+    b.email,
+    c.carrname
+        
+}
+
+where a.customid = '00000001' 
+ 
