@@ -1,0 +1,19 @@
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_EX7'
+@AbapCatalog.compiler.compareFilter: true
+@AccessControl.authorizationCheck: #CHECK
+@EndUserText.label: 'union'
+define view ZCDS_DDL_EX7 as 
+select from 
+sbook
+{
+    customid
+}
+where customid = '00000001'
+union // union all
+select from
+scustom
+{
+  id as customid
+}
+where id = '00000001' 
+ 
