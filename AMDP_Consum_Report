@@ -1,0 +1,32 @@
+*&---------------------------------------------------------------------*
+*& Report zreport19
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zreport19.
+
+parameters:p_name type s_carrname.
+
+ZCL_AMDP_EX18=>amdp_procedure(
+  EXPORTING
+    IV_MANDT = sy-mandt
+    IV_NAME  = p_name
+  IMPORTING
+    ET_SCUSTOM = data(lt_scarr)
+).
+
+   try.
+  cl_salv_table=>FACTORY(
+    EXPORTING
+      LIST_DISPLAY   = IF_SALV_C_BOOL_SAP=>FALSE    " ALV Displayed in List Mode
+*      R_CONTAINER    =     " Abstract Container for GUI Controls
+*      CONTAINER_NAME =
+    IMPORTING
+      R_SALV_TABLE   =  data(lo_alv)  " Basis Class Simple ALV Tables
+    CHANGING
+      T_TABLE        = lt_scarr
+  ).
+    CATCH CX_SALV_MSG.    "
+    endtry.
+
+lo_alv->DISPLAY( ).
