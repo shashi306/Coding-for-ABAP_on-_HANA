@@ -1,0 +1,26 @@
+class ZCL_AMDP_EX18 definition public. " public - global class
+public section.
+interfaces if_amdp_marker_hdb.
+
+types: ty_scustom type table of scarr.
+
+class-methods amdp_procedure
+      importing
+                value(iv_mandt) type mandt
+                value(iv_name)  type s_carrname
+      exporting
+                value(et_scustom) type ty_scustom.
+ENDCLASS.
+
+CLASS ZCL_AMDP_EX18 IMPLEMENTATION.
+method amdp_procedure by database procedure
+                   for hdb
+                   language sqlscript
+                   options read-only
+                   using scarr.
+       et_scustom = select * from scarr
+                           where mandt = :iv_mandt and
+                           contains (carrname, :iv_name, FUZZY(0.4));
+endmethod.
+ENDCLASS.
+
