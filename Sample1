@@ -1,9 +1,9 @@
-@AbapCatalog.sqlViewName: 'ZSD1_SQL'
+@AbapCatalog.sqlViewName: 'ZSample1'
 @AbapCatalog.compiler.compareFilter: true
 @AccessControl.authorizationCheck: #CHECK
 @VDM.viewType: #BASIC
 @EndUserText.label: 'Pending Deliver with RxPTL Basic View 1'
-define view ZSD1 as select from likp as lp    
+define view ZSample1 as select from likp as lp    
 left outer join lips as ls on lp.vbeln = ls.vbeln 
 left outer join vbap as vp on ls.vgbel = vp.vbeln
 left outer join vbak as vk on vp.vbeln =vk.vbeln
