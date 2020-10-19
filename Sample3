@@ -1,0 +1,101 @@
+@AbapCatalog.sqlViewName: 'ZSample3'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
+@AccessControl.authorizationCheck: #CHECK
+@EndUserText.label: 'Chargeback Details Report'
+define view ZSample3_CDS as select from /irm/gcrhdr as HDR 
+inner join /irm/gcritm as ITM on
+    HDR.mandt = ITM.mandt and 
+    HDR.vbeln = ITM.vbeln 
+left outer join kna1 as CUST on
+    HDR.mandt = CUST.mandt and 
+    HDR.kunag = CUST.kunnr
+left outer join /irm/ipbbasp as CONT on
+    ITM.mandt = CONT.mandt and  
+    ITM.knuma_det = CONT.knuma_ag
+left outer join wcocoh as COCO on
+    CONT.mandt = COCO.client and 
+    CONT.ccnum = COCO.num
+left outer join /irm/gcrpst as PSTNG on
+    HDR.mandt = PSTNG.mandt and 
+    HDR.vbeln = PSTNG.vbeln and 
+    PSTNG.rpstdc = '' and 
+    PSTNG.revrs = ''
+left outer join /irm/gcrptr as PRTNR on
+    ITM.mandt = PRTNR.mandt and 
+    ITM.vbeln = PRTNR.vbeln and 
+    ITM.posnr = PRTNR.posnr --and PRTNR.parvw = 'YI'
+left outer join /irm/gcrptr as SHIP on
+    ITM.mandt = SHIP.mandt and 
+    ITM.vbeln = SHIP.vbeln and 
+    (SHIP.posnr = '000000' or SHIP.posnr is null) and 
+    (SHIP.parvw = 'WE' or SHIP.parvw = 'SH')
+left outer join kna1 as SHIP_TO on
+    SHIP.mandt = SHIP_TO.mandt and 
+    SHIP.kunnr = SHIP_TO.kunnr
+left outer join vbrk as SETLMNT on
+    PSTNG.mandt = SETLMNT.mandt and 
+    PSTNG.pstdc = SETLMNT.vbeln
+{
+HDR.mandt as MANDT,
+PRTNR.kunnr as KUNRG,
+HDR.kunag as KUNAG,
+HDR.bstat as BSTAT,
+HDR.vbeln as VBELN,
+ITM.posnr as POSNR,
+HDR.xblnr as YREF_NUM,
+ITM.vbelv as YCUSTOMER_INVOICE,
+HDR.erdat as YCLAIM_DATE,
+LEFT(HDR.erdat,6  ) as YEARMONTH,
+ITM.matnr as MATNR,
+ITM.matnr as YPROD_DESC,
+ITM.matnr as YPRODUCT,
+ITM.yfkimg as YCLAIM_QTY,
+ITM.vrkme as VRKME,
+ITM.netwr as YTOTAL_AMOUNT,
+ITM.kzwi1 as YWAC_SUB,
+ITM.kzwi4 as YWAC_CALC,
+ITM.kzwi1 as YEXT_SUB_WAC,
+ITM.kzwi4 as YEXT_WAC_CALC,
+ITM.kzwi2 as YCONT_PRICE_SUB,
+ITM.kzwi5 as YCONT_PRICE_CALC,
+ITM.kzwi2 as YEXT_CONT_PRICE,
+ITM.kzwi5 as YEXT_CONT_CALC,
+ITM.kzwi3 as YEXT_CHARGEBACK_SUB,
+ITM.kzwi6 as YEXT_CB_CALC,
+ITM.netwr as YCHARGEBACK_PAID,
+ITM.kzwi5 as YINDIRECT_PRICE,
+ITM.kzwi4 as YSYS_WAC,
+--ITM.KZWI6,
+ITM.fbuda as YPRICING_DATE,
+ITM.zecuscity as ORT01,
+ITM.zepcode as PSTLZ,
+ITM.zecusregn as REGIO,
+ITM.zecusadd as STRAS,
+CUST.name4 as YCUSTOMER_PARENT,
+COCO.date_from as YCONTRACT_START_DATE,
+COCO.date_to as YCONTRACT_END_DATE,
+COCO.vkgrp as YSALES_REP,
+CONT.knuma_ag as KNUMA_AG,
+CONT.knuma_ag as ABREX,
+CONT.knuma_ag as BOTEXT,
+CONT.knuma_ag as YCONTRACT,
+PSTNG.pstdc as PSTDC,
+PSTNG.postm as POSTM,
+SETLMNT.netwr as YPOSTED_AMOUNT,
+SETLMNT.waerk as WAERK,
+PSTNG.rpstdc as RPSTDC,
+PSTNG.revrs as REVRS,
+PSTNG.ernam as YPOSTED_BY,
+SETLMNT.fkdat as YSETTLEMENT_DATE,
+cast(1 as abap.int4) as YCOUNTER,
+ITM.ptrit_1 as PTRIT_1,
+ITM.ptrid_1 as PTRID_1,
+SHIP_TO.kunnr as YSHIP_TO,
+SHIP_TO.name1 as YSHIP_TO_NAME,
+SHIP_TO.stras as YSHIP_TO_STREET,
+SHIP_TO.ort01 as YSHIP_TO_CITY,
+SHIP_TO.regio as YSHIP_TO_REGION,
+SHIP_TO.pstlz as YSHIP_TO_POSTAL    
+}
+where HDR.crtyp = 'YC01' or HDR.crtyp = 'YCH1' or HDR.crtyp ='YCM1' 
