@@ -1,9 +1,9 @@
-@AbapCatalog.sqlViewName: 'ZSample_FLTR'
+@AbapCatalog.sqlViewName: 'ZSample2'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Billing Doc Search'
-define view ZSample_FLTR_CDS as select distinct from /vgm/ips1yr01hd as HDR 
+define view ZSample2_CDS as select distinct from /vgm/ips1yr01hd as HDR 
                     inner join /vgm/ips1yr01it as ITM on
                     HDR.mandt = ITM.mandt and HDR.bcknum = ITM.bcknum
                     left outer join /irm/ipbbasp as AGR on
